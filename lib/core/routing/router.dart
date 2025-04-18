@@ -10,6 +10,7 @@ import '../../data/repository/photo_repository_impl.dart';
 import '../../domain/model/photo.dart';
 import '../../domain/use_case/search_photos_use_case.dart';
 import '../../presentation/main/main_view_model.dart';
+import '../di/di_setup.dart';
 
 // GoRouter configuration
 final router = GoRouter(
@@ -19,11 +20,7 @@ final router = GoRouter(
       path: Routes.main,
       builder:
           (context, state) => MainScreen(
-            viewModel: MainViewModel(
-              searchPhotosUseCase: SearchPhotosUseCase(
-                PhotoRepositoryImpl(PixabayApi()),
-              ),
-            ),
+            viewModel: getIt(),
             onTapPhoto: (Photo photo) {
               context.push(Routes.mainWithId(photo.id));
             },
@@ -33,9 +30,7 @@ final router = GoRouter(
           path: ':id',
           builder: (context, state) {
             final id = int.parse(state.pathParameters['id']!);
-            final viewModel = DetailViewModel(
-              SearchPhotoUseCase(PhotoRepositoryImpl(PixabayApi())),
-            );
+            final DetailViewModel viewModel = getIt();
             viewModel.fetchPhoto(id);
 
             return DetailScreen(viewModel: viewModel);
