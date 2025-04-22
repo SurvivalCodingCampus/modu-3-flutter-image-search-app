@@ -8,6 +8,7 @@ import 'package:image_search_app/presentation/main/main_state.dart';
 import 'package:image_search_app/presentation/main/main_view_model.dart';
 
 import '../../core/routing/routes.dart';
+import 'main_action.dart';
 
 class MainScreenRoot extends StatefulWidget {
   final MainViewModel viewModel;
@@ -52,9 +53,13 @@ class _MainScreenRootState extends State<MainScreenRoot> {
       builder: (_, _) {
         return MainScreen(
           state: state,
-          onSearch: viewModel.search,
-          onTapPhoto: (photo) {
-            context.push(Routes.mainWithId(photo.id));
+          onAction: (MainAction action) {
+            switch (action) {
+              case OnSearch():
+                viewModel.search(action.query);
+              case OnTapPhoto():
+                context.push(Routes.mainWithId(action.photo.id));
+            }
           },
         );
       },

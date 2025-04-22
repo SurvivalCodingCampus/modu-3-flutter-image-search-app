@@ -1,20 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:image_search_app/presentation/main/main_action.dart';
 import 'package:image_search_app/presentation/main/main_state.dart';
 
-import '../../domain/model/photo.dart';
 import '../component/photo_item.dart';
 
 class MainScreen extends StatefulWidget {
   final MainState state;
-  final void Function(String query) onSearch;
-  final void Function(Photo photo) onTapPhoto;
+  final void Function(MainAction action) onAction;
 
-  const MainScreen({
-    super.key,
-    required this.state,
-    required this.onSearch,
-    required this.onTapPhoto,
-  });
+  const MainScreen({super.key, required this.state, required this.onAction});
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -44,19 +38,22 @@ class _MainScreenState extends State<MainScreen> {
           controller: queryTextController,
           decoration: InputDecoration(
             suffixIcon: GestureDetector(
+              key: ValueKey('searchIcon'),
               child: Icon(Icons.search),
               onTap: () {
-                widget.onSearch(queryTextController.text);
+                widget.onAction(MainAction.onSearch(queryTextController.text));
               },
             ),
           ),
           onSubmitted: (value) {
-            widget.onSearch(queryTextController.text);
+            widget.onAction(MainAction.onSearch(queryTextController.text));
           },
         ),
         SizedBox(height: 40),
         if (widget.state.isLoading)
-          Center(child: CircularProgressIndicator(key: const ValueKey('Loading'))),
+          Center(
+            child: CircularProgressIndicator(key: const ValueKey('Loading')),
+          ),
         Expanded(
           child: GridView.builder(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -68,7 +65,8 @@ class _MainScreenState extends State<MainScreen> {
             itemBuilder: (BuildContext context, int index) {
               final photo = widget.state.photos[index];
               return GestureDetector(
-                onTap: () => widget.onTapPhoto.call(photo),
+                key: ValueKey('photo:$index'),
+                onTap: () => widget.onAction(MainAction.onTapPhoto(photo)),
                 child: PhotoItem(photo: photo),
               );
             },
