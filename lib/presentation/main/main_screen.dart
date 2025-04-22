@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:image_search_app/presentation/component/photo_item.dart';
+import 'package:image_search_app/presentation/main/main_event.dart';
 import 'package:image_search_app/presentation/main/main_state.dart';
 import 'package:image_search_app/presentation/main/main_view_model.dart';
 
@@ -35,8 +36,11 @@ class _MainScreenState extends State<MainScreen> {
     super.initState();
     _subscription = viewModel.eventStream.listen((event) {
       if (mounted) {
-        final snackBar = SnackBar(content: Text(event));
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        switch (event) {
+          case ShowSnackbar():
+            final snackBar = SnackBar(content: Text(event.message));
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        }
       }
     });
   }
@@ -79,8 +83,7 @@ class _MainScreenState extends State<MainScreen> {
           },
         ),
         SizedBox(height: 40),
-        if (state.isLoading)
-          Center(child: CircularProgressIndicator()),
+        if (state.isLoading) Center(child: CircularProgressIndicator()),
         Expanded(
           child: GridView.builder(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

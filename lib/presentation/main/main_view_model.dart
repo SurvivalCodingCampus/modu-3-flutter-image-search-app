@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_search_app/core/result.dart';
 import 'package:image_search_app/domain/model/photo.dart';
 import 'package:image_search_app/domain/use_case/search_photos_use_case.dart';
+import 'package:image_search_app/presentation/main/main_event.dart';
 import 'package:image_search_app/presentation/main/main_state.dart';
 
 class MainViewModel with ChangeNotifier {
@@ -13,9 +14,9 @@ class MainViewModel with ChangeNotifier {
 
   MainState get state => _state;
 
-  final _eventController = StreamController<String>();
+  final _eventController = StreamController<MainEvent>();
 
-  Stream<String> get eventStream => _eventController.stream;
+  Stream<MainEvent> get eventStream => _eventController.stream;
 
   MainViewModel({required SearchPhotosUseCase searchPhotosUseCase})
     : _searchPhotosUseCase = searchPhotosUseCase;
@@ -29,7 +30,7 @@ class MainViewModel with ChangeNotifier {
       case Success<List<Photo>>():
         _state = state.copyWith(photos: result.data);
       case Error<List<Photo>>():
-        _eventController.add('네트워크 에러');
+        _eventController.add(MainEvent.showSnackbar('네트워크 에러'));
     }
 
     _state = state.copyWith(isLoading: false);
