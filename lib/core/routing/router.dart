@@ -2,9 +2,8 @@ import 'package:go_router/go_router.dart';
 import 'package:image_search_app/core/routing/routes.dart';
 import 'package:image_search_app/presentation/detail/detail_screen.dart';
 import 'package:image_search_app/presentation/detail/detail_view_model.dart';
-import 'package:image_search_app/presentation/main/main_screen.dart';
+import 'package:image_search_app/presentation/main/main_screen_root.dart';
 
-import '../../domain/model/photo.dart';
 import '../di/di_setup.dart';
 
 // GoRouter configuration
@@ -25,11 +24,8 @@ final router = GoRouter(
             GoRoute(
               path: Routes.main,
               builder:
-                  (context, state) => MainScreen(
+                  (context, state) => MainScreenRoot(
                     viewModel: getIt(),
-                    onTapPhoto: (Photo photo) {
-                      context.push(Routes.mainWithId(photo.id));
-                    },
                   ),
             ),
           ],

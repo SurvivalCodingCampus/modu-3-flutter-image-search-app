@@ -1,20 +1,18 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:image_search_app/presentation/component/photo_item.dart';
-import 'package:image_search_app/presentation/main/main_event.dart';
 import 'package:image_search_app/presentation/main/main_state.dart';
-import 'package:image_search_app/presentation/main/main_view_model.dart';
 
 import '../../domain/model/photo.dart';
+import '../component/photo_item.dart';
 
 class MainScreen extends StatefulWidget {
+  final MainState state;
+  final void Function(String query) onSearch;
   final void Function(Photo photo) onTapPhoto;
-  final MainViewModel viewModel;
 
   const MainScreen({
     super.key,
-    required this.viewModel,
+    required this.state,
+    required this.onSearch,
     required this.onTapPhoto,
   });
 
@@ -25,43 +23,17 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   final queryTextController = TextEditingController();
 
-  MainViewModel get viewModel => widget.viewModel;
-
-  MainState get state => widget.viewModel.state;
-
-  StreamSubscription? _subscription;
-
-  @override
-  void initState() {
-    super.initState();
-    _subscription = viewModel.eventStream.listen((event) {
-      if (mounted) {
-        switch (event) {
-          case ShowSnackbar():
-            final snackBar = SnackBar(content: Text(event.message));
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        }
-      }
-    });
-  }
-
   @override
   void dispose() {
-    _subscription?.cancel();
     queryTextController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return ListenableBuilder(
-      listenable: widget.viewModel,
-      builder: (_, _) {
-        return Scaffold(
-          appBar: AppBar(title: Text('이미지 검색 앱'), centerTitle: true),
-          body: _buildBody(),
-        );
-      },
+    return Scaffold(
+      appBar: AppBar(title: Text('이미지 검색 앱'), centerTitle: true),
+      body: _buildBody(),
     );
   }
 
@@ -74,16 +46,17 @@ class _MainScreenState extends State<MainScreen> {
             suffixIcon: GestureDetector(
               child: Icon(Icons.search),
               onTap: () {
-                viewModel.search(queryTextController.text);
+                widget.onSearch(queryTextController.text);
               },
             ),
           ),
           onSubmitted: (value) {
-            viewModel.search(value);
+            widget.onSearch(queryTextController.text);
           },
         ),
         SizedBox(height: 40),
-        if (state.isLoading) Center(child: CircularProgressIndicator()),
+        if (widget.state.isLoading)
+          Center(child: CircularProgressIndicator(key: const ValueKey('Loading'))),
         Expanded(
           child: GridView.builder(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -91,9 +64,9 @@ class _MainScreenState extends State<MainScreen> {
               crossAxisSpacing: 10,
               mainAxisSpacing: 10,
             ),
-            itemCount: state.photos.length,
+            itemCount: widget.state.photos.length,
             itemBuilder: (BuildContext context, int index) {
-              final photo = state.photos[index];
+              final photo = widget.state.photos[index];
               return GestureDetector(
                 onTap: () => widget.onTapPhoto.call(photo),
                 child: PhotoItem(photo: photo),
