@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
-import 'package:http/http.dart';
 import 'package:image_search_app/data/data_source/photo_data_source.dart';
+import 'package:image_search_app/data/repository/mock_search_result_repository_impl.dart';
+import 'package:image_search_app/domain/repository/search_result_repository.dart';
 
 import '../../data/data_source/pixabay_api.dart';
 import '../../data/repository/mock_photo_repository_impl.dart';
@@ -16,7 +17,15 @@ final getIt = GetIt.instance;
 void diSetup() {
   getIt.registerSingleton(PixabayApi() as PhotoDataSource);
   getIt.registerSingleton<PhotoRepository>(PhotoRepositoryImpl(getIt()));
-  getIt.registerSingleton(SearchPhotosUseCase(getIt()));
+  getIt.registerSingleton<SearchResultRepository>(
+    MockSearchResultRepositoryImpl(),
+  );
+  getIt.registerSingleton(
+    SearchPhotosUseCase(
+      photoRepository: getIt(),
+      searchResultRepository: getIt(),
+    ),
+  );
   getIt.registerSingleton(SearchPhotoUseCase(getIt()));
 
   getIt.registerFactory(() => MainViewModel(searchPhotosUseCase: getIt()));
@@ -25,7 +34,15 @@ void diSetup() {
 
 void mockDiSetup() {
   getIt.registerSingleton<PhotoRepository>(MockPhotoRepositoryImpl());
-  getIt.registerSingleton(SearchPhotosUseCase(getIt()));
+  getIt.registerSingleton<SearchResultRepository>(
+    MockSearchResultRepositoryImpl(),
+  );
+  getIt.registerSingleton(
+    SearchPhotosUseCase(
+      photoRepository: getIt(),
+      searchResultRepository: getIt(),
+    ),
+  );
   getIt.registerSingleton(SearchPhotoUseCase(getIt()));
 
   getIt.registerFactory(() => MainViewModel(searchPhotosUseCase: getIt()));
