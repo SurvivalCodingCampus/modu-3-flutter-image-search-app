@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:image_search_app/core/result.dart';
 import 'package:image_search_app/domain/model/photo.dart';
@@ -7,12 +9,16 @@ import 'package:image_search_app/presentation/main/main_state.dart';
 class MainViewModel with ChangeNotifier {
   final SearchPhotosUseCase _searchPhotosUseCase;
 
-  MainViewModel({required SearchPhotosUseCase searchPhotosUseCase})
-    : _searchPhotosUseCase = searchPhotosUseCase;
-
   MainState _state = const MainState();
 
   MainState get state => _state;
+
+  final _eventController = StreamController<String>();
+
+  Stream<String> get eventStream => _eventController.stream;
+
+  MainViewModel({required SearchPhotosUseCase searchPhotosUseCase})
+    : _searchPhotosUseCase = searchPhotosUseCase;
 
   void search(String query) async {
     _state = state.copyWith(isLoading: true);
@@ -23,7 +29,7 @@ class MainViewModel with ChangeNotifier {
       case Success<List<Photo>>():
         _state = state.copyWith(photos: result.data);
       case Error<List<Photo>>():
-        print(result.e);
+        _eventController.add('네트워크 에러');
     }
 
     _state = state.copyWith(isLoading: false);
