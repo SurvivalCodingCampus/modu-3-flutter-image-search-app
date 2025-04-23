@@ -1,7 +1,6 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_search_app/core/presentation/one_time_event_mixin.dart';
 import 'package:image_search_app/presentation/main/main_event.dart';
 import 'package:image_search_app/presentation/main/main_screen.dart';
 import 'package:image_search_app/presentation/main/main_state.dart';
@@ -19,31 +18,23 @@ class MainScreenRoot extends StatefulWidget {
   State<MainScreenRoot> createState() => _MainScreenRootState();
 }
 
-class _MainScreenRootState extends State<MainScreenRoot> {
+class _MainScreenRootState extends State<MainScreenRoot>
+    with OneTimeEventMixin {
   MainViewModel get viewModel => widget.viewModel;
 
   MainState get state => widget.viewModel.state;
 
-  StreamSubscription? _subscription;
-
   @override
   void initState() {
     super.initState();
-    _subscription = viewModel.eventStream.listen((event) {
-      if (mounted) {
-        switch (event) {
-          case ShowSnackbar():
-            final snackBar = SnackBar(content: Text(event.message));
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        }
+
+    listenEvent<MainEvent>(viewModel.eventStream, (event) {
+      switch (event) {
+        case ShowSnackbar(:final message):
+          final snackBar = SnackBar(content: Text(message));
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     });
-  }
-
-  @override
-  void dispose() {
-    _subscription?.cancel();
-    super.dispose();
   }
 
   @override
