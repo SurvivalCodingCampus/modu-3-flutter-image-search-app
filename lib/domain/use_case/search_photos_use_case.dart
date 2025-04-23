@@ -1,18 +1,7 @@
 import 'package:image_search_app/core/result.dart';
-import 'package:image_search_app/data/repository/mock_search_result_repository_impl.dart';
-import 'package:image_search_app/data/repository/photo_repository_impl.dart';
 import 'package:image_search_app/domain/model/photo.dart';
 import 'package:image_search_app/domain/repository/photo_repository.dart';
 import 'package:image_search_app/domain/repository/search_result_repository.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:riverpod/riverpod.dart';
-
-final searchPhotosUseCaseProvider = Provider<SearchPhotosUseCase>((ref) {
-  return SearchPhotosUseCase(
-    photoRepository: ref.read(photoRepositoryProvider),
-    searchResultRepository: ref.read(searchResultRepositoryProvider),
-  );
-});
 
 class SearchPhotosUseCase {
   final PhotoRepository _photoRepository;

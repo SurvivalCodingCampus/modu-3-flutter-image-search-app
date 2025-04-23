@@ -1,13 +1,8 @@
 import 'dart:convert';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_search_app/data/data_source/photo_data_source.dart';
 import 'package:image_search_app/data/dto/photo_result_dto.dart';
-
-final photoDataSourceProvider = Provider<PhotoDataSource>((ref) {
-  return PixabayApi();
-});
 
 class PixabayApi implements PhotoDataSource {
   static const String baseUrl =

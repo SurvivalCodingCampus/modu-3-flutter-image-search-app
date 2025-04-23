@@ -2,10 +2,11 @@ import 'dart:async';
 
 import 'package:image_search_app/core/result.dart';
 import 'package:image_search_app/domain/model/photo.dart';
-import 'package:image_search_app/domain/use_case/search_photos_use_case.dart';
 import 'package:image_search_app/presentation/main/main_event.dart';
 import 'package:image_search_app/presentation/main/main_state.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+import '../../core/di/di_setup.dart';
 
 part 'main_view_model.g.dart';
 

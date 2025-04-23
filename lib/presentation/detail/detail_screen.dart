@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_search_app/presentation/detail/detail_view_model.dart';
 
+import '../../core/di/di_setup.dart';
+
 class DetailScreen extends ConsumerWidget {
   final int id;
 
@@ -10,10 +12,7 @@ class DetailScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final viewModel = ref.watch(detailViewModelProvider.notifier);
-    return Scaffold(
-      appBar: AppBar(),
-      body: _buildBody(viewModel),
-    );
+    return Scaffold(appBar: AppBar(), body: _buildBody(viewModel));
   }
 
   Widget _buildBody(DetailViewModel viewModel) {

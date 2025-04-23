@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_search_app/core/result.dart';
 import 'package:image_search_app/domain/model/photo.dart';
 import 'package:image_search_app/domain/use_case/search_photo_use_case.dart';
 import 'package:image_search_app/presentation/detail/detail_state.dart';
-
-final detailViewModelProvider = ChangeNotifierProvider<DetailViewModel>((ref) {
-  return DetailViewModel(ref.read(searchPhotoUseCaseProvider));
-});
 
 class DetailViewModel with ChangeNotifier {
   final SearchPhotoUseCase _searchPhotoUseCase;
