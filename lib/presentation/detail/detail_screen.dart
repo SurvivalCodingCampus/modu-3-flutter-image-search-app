@@ -1,25 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_search_app/presentation/detail/detail_view_model.dart';
 
-class DetailScreen extends StatelessWidget {
-  final DetailViewModel viewModel;
+class DetailScreen extends ConsumerWidget {
+  final int id;
 
-  const DetailScreen({super.key, required this.viewModel});
+  const DetailScreen(this.id, {super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final viewModel = ref.watch(detailViewModelProvider.notifier);
     return Scaffold(
       appBar: AppBar(),
-      body: ListenableBuilder(
-        listenable: viewModel,
-        builder: (context, snapshot) {
-          return _buildBody();
-        },
-      ),
+      body: _buildBody(viewModel),
     );
   }
 
-  Widget _buildBody() {
+  Widget _buildBody(DetailViewModel viewModel) {
     if (viewModel.state.isLoading) {
       return Center(child: CircularProgressIndicator());
     } else if (viewModel.state.photo == null) {

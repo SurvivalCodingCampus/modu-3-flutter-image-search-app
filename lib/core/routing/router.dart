@@ -1,10 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:image_search_app/core/routing/routes.dart';
 import 'package:image_search_app/presentation/detail/detail_screen.dart';
-import 'package:image_search_app/presentation/detail/detail_view_model.dart';
 import 'package:image_search_app/presentation/main/main_screen_root.dart';
-
-import '../di/di_setup.dart';
 
 // GoRouter configuration
 final router = GoRouter(
@@ -24,9 +21,7 @@ final router = GoRouter(
             GoRoute(
               path: Routes.main,
               builder:
-                  (context, state) => MainScreenRoot(
-                    viewModel: getIt(),
-                  ),
+                  (context, state) => MainScreenRoot(),
             ),
           ],
         ),
@@ -36,10 +31,10 @@ final router = GoRouter(
       path: '${Routes.main}/:id',
       builder: (context, state) {
         final id = int.parse(state.pathParameters['id']!);
-        final DetailViewModel viewModel = getIt();
-        viewModel.fetchPhoto(id);
+        // final DetailViewModel viewModel = getIt();
+        // viewModel.fetchPhoto(id);
 
-        return DetailScreen(viewModel: viewModel);
+        return DetailScreen(id);
       },
     ),
   ],

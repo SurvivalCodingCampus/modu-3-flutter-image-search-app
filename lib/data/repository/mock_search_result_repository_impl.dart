@@ -1,5 +1,10 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_search_app/domain/model/photo.dart';
 import 'package:image_search_app/domain/repository/search_result_repository.dart';
+
+final searchResultRepositoryProvider = Provider<SearchResultRepository>((ref) {
+  return MockSearchResultRepositoryImpl();
+});
 
 class MockSearchResultRepositoryImpl implements SearchResultRepository {
   final _memory = <Photo>[];

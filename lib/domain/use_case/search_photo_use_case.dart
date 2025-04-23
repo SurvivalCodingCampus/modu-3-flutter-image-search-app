@@ -1,7 +1,13 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_search_app/data/repository/photo_repository_impl.dart';
 import 'package:image_search_app/domain/repository/photo_repository.dart';
 
 import '../../core/result.dart';
 import '../model/photo.dart';
+
+final searchPhotoUseCaseProvider = Provider<SearchPhotoUseCase>((ref) {
+  return SearchPhotoUseCase(ref.read(photoRepositoryProvider));
+});
 
 class SearchPhotoUseCase {
   final PhotoRepository _photoRepository;

@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_search_app/core/routing/router.dart';
 
-import 'core/di/di_setup.dart';
-
 void main() {
-  // diSetup();
-  mockDiSetup();
-  runApp(const MyApp());
+  runApp(ProviderScope(child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {

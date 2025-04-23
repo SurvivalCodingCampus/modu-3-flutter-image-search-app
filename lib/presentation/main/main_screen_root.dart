@@ -1,43 +1,37 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:image_search_app/presentation/main/main_event.dart';
 import 'package:image_search_app/presentation/main/main_screen.dart';
-import 'package:image_search_app/presentation/main/main_state.dart';
 import 'package:image_search_app/presentation/main/main_view_model.dart';
 
 import '../../core/routing/routes.dart';
 import 'main_action.dart';
 
-class MainScreenRoot extends StatefulWidget {
-  final MainViewModel viewModel;
-
-  const MainScreenRoot({super.key, required this.viewModel});
+class MainScreenRoot extends ConsumerStatefulWidget {
+  const MainScreenRoot({super.key});
 
   @override
-  State<MainScreenRoot> createState() => _MainScreenRootState();
+  ConsumerState<MainScreenRoot> createState() => _MainScreenRootState();
 }
 
-class _MainScreenRootState extends State<MainScreenRoot> {
-  MainViewModel get viewModel => widget.viewModel;
-
-  MainState get state => widget.viewModel.state;
+class _MainScreenRootState extends ConsumerState<MainScreenRoot> {
 
   StreamSubscription? _subscription;
 
   @override
   void initState() {
     super.initState();
-    _subscription = viewModel.eventStream.listen((event) {
-      if (mounted) {
-        switch (event) {
-          case ShowSnackbar():
-            final snackBar = SnackBar(content: Text(event.message));
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        }
-      }
-    });
+    // _subscription = viewModel.eventStream.listen((event) {
+    //   if (mounted) {
+    //     switch (event) {
+    //       case ShowSnackbar():
+    //         final snackBar = SnackBar(content: Text(event.message));
+    //         ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    //     }
+    //   }
+    // });
   }
 
   @override
@@ -48,20 +42,17 @@ class _MainScreenRootState extends State<MainScreenRoot> {
 
   @override
   Widget build(BuildContext context) {
-    return ListenableBuilder(
-      listenable: widget.viewModel,
-      builder: (_, _) {
-        return MainScreen(
-          state: state,
-          onAction: (MainAction action) {
-            switch (action) {
-              case OnSearch():
-                viewModel.search(action.query);
-              case OnTapPhoto():
-                context.push(Routes.mainWithId(action.photo.id));
-            }
-          },
-        );
+    final viewModel = ref.watch(mainViewModelProvider.notifier);
+    final state = ref.watch(mainViewModelProvider);
+    return MainScreen(
+      state: state,
+      onAction: (MainAction action) {
+        switch (action) {
+          case OnSearch():
+            viewModel.search(action.query);
+          case OnTapPhoto():
+            context.push(Routes.mainWithId(action.photo.id));
+        }
       },
     );
   }
