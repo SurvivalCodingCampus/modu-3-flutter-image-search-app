@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../data/data_source/photo_data_source.dart';
 import '../../data/data_source/pixabay_api.dart';
@@ -33,6 +34,6 @@ final photoDataSourceProvider = Provider<PhotoDataSource>((ref) {
   return PixabayApi();
 });
 
-final detailViewModelProvider = ChangeNotifierProvider<DetailViewModel>((ref) {
+final detailViewModelProvider = ChangeNotifierProvider.autoDispose<DetailViewModel>((ref) {
   return DetailViewModel(ref.read(searchPhotoUseCaseProvider));
 });
