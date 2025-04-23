@@ -8,6 +8,7 @@ import 'package:image_search_app/presentation/main/main_view_model.dart';
 
 import '../../core/routing/routes.dart';
 import 'main_action.dart';
+import 'main_event.dart';
 
 class MainScreenRoot extends ConsumerStatefulWidget {
   const MainScreenRoot({super.key});
@@ -17,21 +18,22 @@ class MainScreenRoot extends ConsumerStatefulWidget {
 }
 
 class _MainScreenRootState extends ConsumerState<MainScreenRoot> {
-
   StreamSubscription? _subscription;
 
   @override
   void initState() {
     super.initState();
-    // _subscription = viewModel.eventStream.listen((event) {
-    //   if (mounted) {
-    //     switch (event) {
-    //       case ShowSnackbar():
-    //         final snackBar = SnackBar(content: Text(event.message));
-    //         ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    //     }
-    //   }
-    // });
+    _subscription = ref.read(mainViewModelProvider.notifier).eventStream.listen(
+      (event) {
+        if (mounted) {
+          switch (event) {
+            case ShowSnackbar():
+              final snackBar = SnackBar(content: Text(event.message));
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          }
+        }
+      },
+    );
   }
 
   @override
