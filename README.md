@@ -1,16 +1,9 @@
 # image_search_app
 
-A new Flutter project.
+# 실행 환경
 
-## Getting Started
+## 개발 버전 실행
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```shell
+flutter run -t /lib/main_dev.dart
+```
