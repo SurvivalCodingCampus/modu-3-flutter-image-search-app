@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:image_search_app/core/result.dart';
 import 'package:image_search_app/domain/model/photo.dart';
 import 'package:image_search_app/domain/repository/photo_repository.dart';
@@ -16,7 +17,7 @@ class SearchPhotosUseCase {
   Future<Result<List<Photo>>> execute(String query) async {
     try {
       final savedPhotos = await _searchResultRepository.load();
-      print(savedPhotos);
+      debugPrint(savedPhotos.toString());
 
       final results = await _photoRepository.getPhotos(query);
 
